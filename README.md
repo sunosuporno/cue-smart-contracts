@@ -1,7 +1,7 @@
 # Cue Smart Contracts
 
 This repository contains the smart contracts for the Cue protocol.
-Cue aims to be the default web3 notification OS
+Cue aims to be the notification OS for web3
 
 ## Deployment Addresses
 
