@@ -7,6 +7,7 @@ import "@tableland/evm/contracts/ITablelandTables.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "usingtellor/contracts/UsingTellor.sol";
+import "./ICueB2B.sol";
 
 contract CueB2B is ERC721Holder, Ownable, UsingTellor {
     ITablelandTables internal _tableland;
@@ -120,7 +121,7 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
                 StringsUpgradeable.toString(_counter),
                 ", '",
                 company_name,
-                ", '",
+                "', '",
                 notif_name,
                 "', '",
                 ipfs_hash,
@@ -155,7 +156,7 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
                 StringsUpgradeable.toString(_counter),
                 ", '",
                 company_name,
-                ", '",
+                "', '",
                 contract_Address,
                 "');"
             )

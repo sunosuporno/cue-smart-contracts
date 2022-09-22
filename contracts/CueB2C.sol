@@ -15,7 +15,7 @@ contract CueB2C is ERC721Holder, Ownable {
     uint256 internal _counter;
 
     constructor(address _registry) payable {
-        _tablePrefix = "cue_ethereum";
+        _tablePrefix = "cue_notify";
         _tableland = ITablelandTables(_registry);
         _counter = 0;
     }
