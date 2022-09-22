@@ -6,6 +6,8 @@ const alchemyGoerli = process.env.ALCHEMY_GOERLI;
 const alchemy_opt_goerli = process.env.ALCHEMY_GOERLI_OPTIMISM;
 const privateKey1 = process.env.PRIVATE_KEY;
 const polygonscanApiKey = process.env.POLYGONSCAN_API_KEY;
+const etherscanApiKey = process.env.ETHERSCAN_API_KEY;
+const optimismApiKey = process.env.OPTIMISM_API_KEY;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -37,6 +39,18 @@ module.exports = {
   etherscan: {
     apiKey: {
       polygonMumbai: polygonscanApiKey,
+      goerli: etherscanApiKey,
+      opt_goerli: optimismApiKey,
     },
+    customChains: [
+      {
+        network: "opt_goerli",
+        chainId: 420,
+        urls: {
+          apiURL: "https://api-optimistic.etherscan.io/api",
+          browserURL: "https://optimistic.etherscan.io",
+        },
+      },
+    ],
   },
 };

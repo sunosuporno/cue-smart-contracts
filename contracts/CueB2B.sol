@@ -16,11 +16,11 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
     uint256 internal _counter;
     mapping(string => uint256) public tables;
     mapping(address => string) public walletToCompany;
-    string apiUrl = "https://cue-tellor.vercel.app/query/";
-    string parseArgs = "message";
-    string permissionTable;
-    string notifTable;
-    string registerTable;
+    string public apiUrl = "https://cue-tellor.vercel.app";
+    string public parseArgs = "message";
+    string public permissionTable;
+    string public notifTable;
+    string public registerTable;
 
     constructor(address _registry, address payable _tellorAddress)
         payable
@@ -30,7 +30,7 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
         _counter = 0;
     }
 
-    event Notify(string indexed wallet_address, string indexed notif_id);
+    event Notify(string wallet_address, string notif_id);
 
     function create(string memory prefix, string memory tableStatement)
         public
@@ -132,7 +132,7 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
     }
 
     /**
-     * @notice add a new entry to contract regostration table
+     * @notice add a new entry to contract registration table
      */
 
     function writeToContractRegisterTable(
@@ -163,6 +163,10 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
         );
         _counter = _counter + 1;
     }
+
+    /**
+     * @notice call to Tellor Oracle to check if user has granted permission to a certain app
+     */
 
     function checkUserPermission(
         string memory company_name,
@@ -197,6 +201,10 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
         }
     }
 
+    /**
+     * @notice call to Tellor Oracle to check if the smart contract calling the function is registered
+     */
+
     function checkContractRegistration(
         string memory company_name,
         string memory contract_address
@@ -229,6 +237,10 @@ contract CueB2B is ERC721Holder, Ownable, UsingTellor {
             return false;
         }
     }
+
+    /**
+     * @notice the main function to send a notification to a user
+     */
 
     function sendNotif(
         string memory company_name,
