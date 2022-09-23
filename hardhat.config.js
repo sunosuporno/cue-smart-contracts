@@ -47,8 +47,8 @@ module.exports = {
         network: "opt_goerli",
         chainId: 420,
         urls: {
-          apiURL: "https://api-optimistic.etherscan.io/api",
-          browserURL: "https://optimistic.etherscan.io",
+          apiURL: "https://api-goerli-optimism.etherscan.io/api",
+          browserURL: "https://goerli-optimism.etherscan.io",
         },
       },
     ],

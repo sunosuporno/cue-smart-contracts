@@ -4,8 +4,8 @@ async function main() {
   // We get the contract to deploy
   const CueB2B = await hre.ethers.getContractFactory("CueB2B");
   const cueB2B = await CueB2B.deploy(
-    "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
-    "0x7B8AC044ebce66aCdF14197E8De38C1Cc802dB4A"
+    "0xC72E8a7Be04f2469f8C2dB3F1BdF69A7D516aBbA",
+    "0x08b193bC308eC1E60cE0064CB503c9D85A841347"
   );
 
   await cueB2B.deployed();
@@ -17,8 +17,8 @@ async function main() {
   await hre.run("verify:verify", {
     address: cueB2B.address,
     constructorArguments: [
-      "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
-      "0x7B8AC044ebce66aCdF14197E8De38C1Cc802dB4A",
+      "0xC72E8a7Be04f2469f8C2dB3F1BdF69A7D516aBbA",
+      "0x08b193bC308eC1E60cE0064CB503c9D85A841347",
     ],
   });
 }

@@ -4,7 +4,7 @@ async function main() {
   // We get the contract to deploy
   const TestContract = await hre.ethers.getContractFactory("TestContract");
   const testContract = await TestContract.deploy(
-    "0x2125aF4B5a1F21Bf2f6F218384Ee89a18E30AaB6"
+    "0xbF2c92D57A9b8270273D1b9e42cc51566184a3f7"
   );
 
   await testContract.deployed();
@@ -15,7 +15,7 @@ async function main() {
 
   await hre.run("verify:verify", {
     address: testContract.address,
-    constructorArguments: ["0x2125aF4B5a1F21Bf2f6F218384Ee89a18E30AaB6"],
+    constructorArguments: ["0xbF2c92D57A9b8270273D1b9e42cc51566184a3f7"],
   });
 }
 
