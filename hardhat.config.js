@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-etherscan");
+require("@openzeppelin/hardhat-upgrades");
 require("dotenv").config();
 const alchemyMumbai = process.env.ALCHEMY_MUMBAI;
 const alchemyGoerli = process.env.ALCHEMY_GOERLI;

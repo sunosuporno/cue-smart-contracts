@@ -2,61 +2,87 @@
 
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "@tableland/evm/contracts/ITablelandTables.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract CueB2C is ERC721Holder, Ownable {
+contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
     ITablelandTables internal _tableland;
     string internal _tablePrefix;
-    string public tableName;
     uint256 internal _tableId;
     uint256 internal _counter;
+    mapping(string => uint256) public tables;
+    string public token_transact_table;
+    string public nft_floor_table;
+    string public token_price_table;
+    string public snapshot_table;
 
-    constructor(address _registry) payable {
-        _tablePrefix = "cue_notify";
+    function initialize(address _registry) public initializer {
+        __ERC721Holder_init_unchained();
+        __Ownable_init_unchained();
         _tableland = ITablelandTables(_registry);
         _counter = 0;
     }
 
-    function createTable() external payable onlyOwner {
-        _tableId = _tableland.createTable(
+    function create(string memory prefix, string memory tableStatement)
+        external
+        payable
+    {
+        uint256 tableId = _tableland.createTable(
             address(this),
             string.concat(
                 "CREATE TABLE ",
-                _tablePrefix,
+                prefix,
                 "_",
                 StringsUpgradeable.toString(block.chainid),
-                " (id int primary key, protocol text, wallet_address text, token text, deposit_withdraw text, notify_by text, posted_by text);"
+                " (",
+                tableStatement,
+                ");"
             )
         );
 
-        tableName = string.concat(
-            _tablePrefix,
+        string memory tableName = string.concat(
+            prefix,
             "_",
             StringsUpgradeable.toString(block.chainid),
             "_",
-            StringsUpgradeable.toString(_tableId)
+            StringsUpgradeable.toString(tableId)
         );
+
+        tables[tableName] = tableId;
     }
 
-    function writeTotable(
+    function setTokenTransactTable(string memory tableName) external onlyOwner {
+        token_transact_table = tableName;
+    }
+
+    function setNFTFloorTable(string memory tableName) external onlyOwner {
+        nft_floor_table = tableName;
+    }
+
+    function setTokenPriceTable(string memory tableName) external onlyOwner {
+        token_price_table = tableName;
+    }
+
+    function setSnapshotTable(string memory tableName) public onlyOwner {
+        snapshot_table = tableName;
+    }
+
+    function writeToTokenTransactTable(
         string memory protocol,
         string memory wallet_address,
         string memory token,
         string memory deposit_withdraw,
         string memory notify_by
     ) external payable {
-        string memory posted_by = StringsUpgradeable.toString(
-            uint160(msg.sender)
-        );
         _tableland.runSQL(
             address(this),
-            _tableId,
+            tables[token_transact_table],
             string.concat(
                 "INSERT INTO ",
-                tableName,
+                token_transact_table,
                 " (id, protocol, wallet_address, token, deposit_withdraw, notify_by, posted_by) VALUES (",
                 StringsUpgradeable.toString(_counter),
                 ", '",
@@ -70,20 +96,146 @@ contract CueB2C is ERC721Holder, Ownable {
                 "', '",
                 notify_by,
                 "', '",
-                posted_by,
+                StringsUpgradeable.toHexString(msg.sender),
                 "');"
             )
         );
         _counter = _counter + 1;
     }
 
-    function deleteFromTable(uint256 id) external payable {
+    function writeToNFTFloorTable(
+        string memory collection_address,
+        uint256 floor_price,
+        string memory g_or_l,
+        string memory notify_by
+    ) external payable {
         _tableland.runSQL(
             address(this),
-            _tableId,
+            tables[nft_floor_table],
+            string.concat(
+                "INSERT INTO ",
+                nft_floor_table,
+                " (id, collection_address, floor_price, g_or_l, notify_by, posted_by) VALUES (",
+                StringsUpgradeable.toString(_counter),
+                ", '",
+                collection_address,
+                "', ",
+                StringsUpgradeable.toString(floor_price),
+                ", '",
+                g_or_l,
+                "', '",
+                notify_by,
+                "', '",
+                StringsUpgradeable.toHexString(msg.sender),
+                "');"
+            )
+        );
+        _counter = _counter + 1;
+    }
+
+    function writeToTokenPriceTable(
+        string memory token_address,
+        uint256 price,
+        string memory g_or_l,
+        string memory notify_by
+    ) external payable {
+        _tableland.runSQL(
+            address(this),
+            tables[token_price_table],
+            string.concat(
+                "INSERT INTO ",
+                token_price_table,
+                " (id, token_address, price, g_or_l, notify_by, posted_by) VALUES (",
+                StringsUpgradeable.toString(_counter),
+                ", '",
+                token_address,
+                "', ",
+                StringsUpgradeable.toString(price),
+                ", '",
+                g_or_l,
+                "', '",
+                notify_by,
+                "', '",
+                StringsUpgradeable.toHexString(msg.sender),
+                "');"
+            )
+        );
+        _counter = _counter + 1;
+    }
+
+    function writeToSnapshotTable(
+        string memory space,
+        string memory action,
+        string memory notify_by
+    ) external payable {
+        _tableland.runSQL(
+            address(this),
+            tables[snapshot_table],
+            string.concat(
+                "INSERT INTO ",
+                snapshot_table,
+                " (id, space, action, notify_by, posted_by) VALUES (",
+                StringsUpgradeable.toString(_counter),
+                ", '",
+                space,
+                "', '",
+                action,
+                "', '",
+                notify_by,
+                "', '",
+                StringsUpgradeable.toHexString(msg.sender),
+                "');"
+            )
+        );
+        _counter = _counter + 1;
+    }
+
+    function deleteFromTokenTransactTable(uint256 id) external payable {
+        _tableland.runSQL(
+            address(this),
+            tables[token_transact_table],
             string.concat(
                 "DELETE FROM ",
-                tableName,
+                token_transact_table,
+                " WHERE id = ",
+                StringsUpgradeable.toString(id)
+            )
+        );
+    }
+
+    function deleteFromNFTFloorTable(uint256 id) external payable {
+        _tableland.runSQL(
+            address(this),
+            tables[nft_floor_table],
+            string.concat(
+                "DELETE FROM ",
+                nft_floor_table,
+                " WHERE id = ",
+                StringsUpgradeable.toString(id)
+            )
+        );
+    }
+
+    function deleteFromTokenPriceTable(uint256 id) external payable {
+        _tableland.runSQL(
+            address(this),
+            tables[token_price_table],
+            string.concat(
+                "DELETE FROM ",
+                token_price_table,
+                " WHERE id = ",
+                StringsUpgradeable.toString(id)
+            )
+        );
+    }
+
+    function deleteFromSnapshotTable(uint256 id) external payable {
+        _tableland.runSQL(
+            address(this),
+            tables[snapshot_table],
+            string.concat(
+                "DELETE FROM ",
+                snapshot_table,
                 " WHERE id = ",
                 StringsUpgradeable.toString(id)
             )

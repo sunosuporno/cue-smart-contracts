@@ -2,14 +2,14 @@
 
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/utils/ERC721HolderUpgradeable.sol";
 import "@tableland/evm/contracts/ITablelandTables.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "usingtellor/contracts/UsingTellor.sol";
 import "./ICueB2B.sol";
 
-contract CueB2B is ERC721Holder, Ownable, UsingTellor {
+contract CueB2B is ERC721HolderUpgradeable, Ownable, UsingTellor {
     ITablelandTables internal _tableland;
     string internal _tablePrefix;
     uint256 internal _tableId;
