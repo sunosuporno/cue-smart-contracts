@@ -19,9 +19,9 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
     string public token_price_table;
     string public snapshot_table;
 
-    function initialize(address _registry) public initializer {
-        __ERC721Holder_init_unchained();
-        __Ownable_init_unchained();
+    function initialize(address _registry) public payable initializer {
+        __ERC721Holder_init();
+        __Ownable_init();
         _tableland = ITablelandTables(_registry);
         _counter = 0;
     }
@@ -96,7 +96,7 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
                 "', '",
                 notify_by,
                 "', '",
-                StringsUpgradeable.toHexString(msg.sender),
+                StringsUpgradeable.toHexString(_msgSender()),
                 "');"
             )
         );
@@ -126,7 +126,7 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
                 "', '",
                 notify_by,
                 "', '",
-                StringsUpgradeable.toHexString(msg.sender),
+                StringsUpgradeable.toHexString(_msgSender()),
                 "');"
             )
         );
@@ -156,7 +156,7 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
                 "', '",
                 notify_by,
                 "', '",
-                StringsUpgradeable.toHexString(msg.sender),
+                StringsUpgradeable.toHexString(_msgSender()),
                 "');"
             )
         );
@@ -183,7 +183,7 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
                 "', '",
                 notify_by,
                 "', '",
-                StringsUpgradeable.toHexString(msg.sender),
+                StringsUpgradeable.toHexString(_msgSender()),
                 "');"
             )
         );

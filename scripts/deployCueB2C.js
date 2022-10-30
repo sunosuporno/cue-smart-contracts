@@ -1,17 +1,11 @@
 const { ethers, upgrades } = require("hardhat");
 async function main() {
   // We get the contract to deploy
-  const gas = await ethers.provider.getGasPrice();
   const CueB2C = await ethers.getContractFactory("CueB2C");
   console.log("Deploying CueB2C...");
-  const cueB2C = await upgrades.deployProxy(
-    CueB2C,
-    ["0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68"],
-    {
-      gasPrice: gas,
-      initializer: "initialize",
-    }
-  );
+  const cueB2C = await upgrades.deployProxy(CueB2C, [
+    "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
+  ]);
 
   await cueB2C.deployed();
 
