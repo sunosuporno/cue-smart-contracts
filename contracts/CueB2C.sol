@@ -83,9 +83,7 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
             string.concat(
                 "INSERT INTO ",
                 token_transact_table,
-                " (id, protocol, wallet_address, token, deposit_withdraw, notify_by, posted_by) VALUES (",
-                StringsUpgradeable.toString(_counter),
-                ", '",
+                " (protocol, wallet_address, token, deposit_withdraw, notify_by, posted_by) VALUES ('",
                 protocol,
                 "', '",
                 wallet_address,
@@ -106,7 +104,6 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
     function writeToNFTFloorTable(
         string memory collection_address,
         uint256 floor_price,
-        string memory g_or_l,
         string memory notify_by
     ) external payable {
         _tableland.runSQL(
@@ -115,14 +112,10 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
             string.concat(
                 "INSERT INTO ",
                 nft_floor_table,
-                " (id, collection_address, floor_price, g_or_l, notify_by, posted_by) VALUES (",
-                StringsUpgradeable.toString(_counter),
-                ", '",
+                " (collection_address, floor_price, notify_by, posted_by) VALUES ('",
                 collection_address,
-                "', ",
+                "', '",
                 StringsUpgradeable.toString(floor_price),
-                ", '",
-                g_or_l,
                 "', '",
                 notify_by,
                 "', '",
@@ -145,13 +138,11 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
             string.concat(
                 "INSERT INTO ",
                 token_price_table,
-                " (id, token_address, price, g_or_l, notify_by, posted_by) VALUES (",
-                StringsUpgradeable.toString(_counter),
-                ", '",
+                " (token_address, price, g_or_l, notify_by, posted_by) VALUES ('",
                 token_address,
-                "', ",
+                "', '",
                 StringsUpgradeable.toString(price),
-                ", '",
+                "', '",
                 g_or_l,
                 "', '",
                 notify_by,
@@ -174,9 +165,7 @@ contract CueB2C is Initializable, ERC721HolderUpgradeable, OwnableUpgradeable {
             string.concat(
                 "INSERT INTO ",
                 snapshot_table,
-                " (id, space, action, notify_by, posted_by) VALUES (",
-                StringsUpgradeable.toString(_counter),
-                ", '",
+                " (space, action, notify_by, posted_by) VALUES ('",
                 space,
                 "', '",
                 action,

@@ -4,7 +4,7 @@ async function main() {
   const CueB2C = await ethers.getContractFactory("CueB2C");
   console.log("Deploying CueB2C...");
   const cueB2C = await upgrades.deployProxy(CueB2C, [
-    "0x4b48841d4b32C4650E4ABc117A03FE8B51f38F68",
+    "0xDA8EA22d092307874f30A1F277D1388dca0BA97a",
   ]);
 
   await cueB2C.deployed();
